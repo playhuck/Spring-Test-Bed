@@ -1,0 +1,50 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.5.0'
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'com.side'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Spring Boot 기본
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    
+    // 데이터베이스 관련 (커스텀 트랜잭션 매니저에서 사용)
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'com.h2database:h2' // 테스트용 인메모리 DB
+    
+    // AOP 지원 (트랜잭션 인터셉터 구현용)
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+    
+    // Lombok (코드 간소화)
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    
+    // 로깅
+    implementation 'org.springframework.boot:spring-boot-starter-logging'
+    
+    // 테스트
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    
+    // 테스트용 추가 라이브러리
+    testImplementation 'org.testcontainers:junit-jupiter'
+    testImplementation 'org.testcontainers:h2'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
