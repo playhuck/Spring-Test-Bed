@@ -26,10 +26,14 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'com.h2database:h2' // 테스트용 인메모리 DB
     
+    // PostgreSQL 드라이버 추가
+    implementation 'org.postgresql:postgresql'
+    
     // AOP 지원 (트랜잭션 인터셉터 구현용)
     implementation 'org.springframework.boot:spring-boot-starter-aop'
     
     // Lombok (코드 간소화)
+    implementation 'org.projectlombok:lombok'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     
@@ -40,9 +44,11 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     
-    // 테스트용 추가 라이브러리
+    // Testcontainers - tmpfs 통합테스트용
+    testImplementation platform('org.testcontainers:testcontainers-bom:1.19.3')
     testImplementation 'org.testcontainers:junit-jupiter'
-    testImplementation 'org.testcontainers:h2'
+    testImplementation 'org.testcontainers:postgresql'
+    testRuntimeOnly 'com.h2database:h2'
 }
 
 tasks.named('test') {
