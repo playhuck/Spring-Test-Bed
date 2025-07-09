@@ -3,6 +3,7 @@ package com.side.springtestbed.transactional.customtransactional.core;
 import com.side.springtestbed.transactional.customtransactional.annotation.Isolation;
 import com.side.springtestbed.transactional.customtransactional.annotation.Propagation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -14,6 +15,7 @@ import java.sql.SQLException;
  * - Spring PlatformTransactionManager 역할
  */
 @Slf4j
+@Component
 public class CustomTransactionManager {
     
     private final DataSource dataSource;
