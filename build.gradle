@@ -24,7 +24,6 @@ dependencies {
     
     // 데이터베이스 관련 (커스텀 트랜잭션 매니저에서 사용)
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'com.h2database:h2' // 테스트용 인메모리 DB
     
     // PostgreSQL 드라이버 추가
     implementation 'org.postgresql:postgresql'
@@ -44,11 +43,13 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     
+    // H2 Database (테스트용)
+    testImplementation 'com.h2database:h2'
+    
     // Testcontainers - tmpfs 통합테스트용
     testImplementation platform('org.testcontainers:testcontainers-bom:1.19.3')
     testImplementation 'org.testcontainers:junit-jupiter'
     testImplementation 'org.testcontainers:postgresql'
-    testRuntimeOnly 'com.h2database:h2'
 }
 
 tasks.named('test') {

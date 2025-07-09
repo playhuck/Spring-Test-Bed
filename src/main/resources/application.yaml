@@ -1,8 +1,8 @@
 spring:
   application:
     name: Spring-Test-Bed
-  
-  # PostgreSQL ????? ??
+
+  # Primary DataSource (PostgreSQL)
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/high_performance_java_persistence
@@ -14,20 +14,37 @@ spring:
       connection-timeout: 30000
       idle-timeout: 600000
       max-lifetime: 1800000
-  
-  # JPA/Hibernate ??
+
+  # Secondary DataSource (H2)
+  h2:
+    datasource:
+      url: jdbc:h2:tcp://localhost/~/test
+      driver-class-name: org.h2.Driver
+      username: sa
+      password:
+      hikari:
+        maximum-pool-size: 10
+        minimum-idle: 2
+        connection-timeout: 30000
+        idle-timeout: 600000
+        max-lifetime: 1800000
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: true
+
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: validate  # ??: validate, ??: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
-    show-sql: true
+      ddl-auto: validate
     format-sql: true
+    show-sql: true
     properties:
       hibernate:
-        use_sql_comments: true
         jdbc:
           batch_size: 20
           order_inserts: true
@@ -35,7 +52,6 @@ spring:
         connection:
           provider_disables_autocommit: true
 
-# ?? ??
 logging:
   level:
     org.hibernate.SQL: DEBUG

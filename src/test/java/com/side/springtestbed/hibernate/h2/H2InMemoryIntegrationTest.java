@@ -22,6 +22,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+
 @SpringBootTest
 @TestPropertySource(properties = {
         "spring.datasource.url=jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE",
@@ -50,11 +51,11 @@ class H2InMemoryIntegrationTest {
     @DisplayName("H2 인메모리 데이터베이스 연결 테스트")
     void testH2InMemoryConnection() {
         log.info("[H2-INMEMORY] 인메모리 데이터베이스 연결 테스트 시작");
-        
+
         // 간단한 연결 테스트
         long count = postRepository.count();
         assertThat(count).isEqualTo(0);
-        
+
         log.info("[H2-INMEMORY] 인메모리 데이터베이스가 성공적으로 실행 중입니다");
         log.info("[H2-INMEMORY] H2 Console이 활성화되어 있습니다");
     }
@@ -179,18 +180,18 @@ class H2InMemoryIntegrationTest {
         long searchStartTime = System.currentTimeMillis();
         List<Post> titleSearchResults = postRepository.findByTitleContainingIgnoreCase("h2");
         long searchEndTime = System.currentTimeMillis();
-        
+
         assertThat(titleSearchResults).hasSize(3);
-        log.info("[H2-INMEMORY] 제목 검색 테스트 완료: {} 건 (검색 시간: {}ms)", 
+        log.info("[H2-INMEMORY] 제목 검색 테스트 완료: {} 건 (검색 시간: {}ms)",
                 titleSearchResults.size(), searchEndTime - searchStartTime);
 
         // 최근 포스트 개수 확인
         long recentCountStartTime = System.currentTimeMillis();
         Long recentPostsCount = postRepository.countByCreatedDateAfter(LocalDateTime.now().minusDays(1));
         long recentCountEndTime = System.currentTimeMillis();
-        
+
         assertThat(recentPostsCount).isEqualTo(3);
-        log.info("[H2-INMEMORY] 최근 포스트 개수 조회 완료: {} 건 (조회 시간: {}ms)", 
+        log.info("[H2-INMEMORY] 최근 포스트 개수 조회 완료: {} 건 (조회 시간: {}ms)",
                 recentPostsCount, recentCountEndTime - recentCountStartTime);
 
         log.info("[H2-INMEMORY] 기본 검색 기능 테스트 완료");
@@ -263,7 +264,7 @@ class H2InMemoryIntegrationTest {
 
         // 트랜잭션 없이 실행하여 실제 커밋 테스트
         Long postId = createPostWithAssociations();
-        
+
         // 데이터 확인
         Optional<Post> post = postRepository.findById(postId);
         assertThat(post).isPresent();
@@ -272,7 +273,7 @@ class H2InMemoryIntegrationTest {
         // 연관 데이터 확인
         Long commentCount = commentRepository.countByPostId(postId);
         assertThat(commentCount).isGreaterThan(0);
-        
+
         long endTime = System.currentTimeMillis();
         log.info("[H2-INMEMORY] 연관 데이터 일관성 확인: 댓글 {} 개", commentCount);
         log.info("[H2-INMEMORY] 트랜잭션 테스트 총 시간: {}ms", endTime - startTime);
@@ -291,7 +292,7 @@ class H2InMemoryIntegrationTest {
                 .build();
 
         post.addComment(comment);
-        
+
         Post savedPost = postRepository.save(post);
         return savedPost.getId();
     }
@@ -307,7 +308,7 @@ class H2InMemoryIntegrationTest {
         // 배치 처리로 1000개 포스트 생성
         for (int batch = 0; batch < 10; batch++) {
             long batchStartTime = System.currentTimeMillis();
-            
+
             for (int i = 1; i <= 100; i++) {
                 Post post = Post.builder()
                         .title("배치 처리 테스트 포스트 " + (batch * 100 + i))
@@ -325,9 +326,9 @@ class H2InMemoryIntegrationTest {
 
                 postRepository.save(post);
             }
-            
+
             long batchEndTime = System.currentTimeMillis();
-            log.info("[H2-INMEMORY] 배치 {} 완료 (100개 포스트, 시간: {}ms)", 
+            log.info("[H2-INMEMORY] 배치 {} 완료 (100개 포스트, 시간: {}ms)",
                     batch + 1, batchEndTime - batchStartTime);
         }
 
