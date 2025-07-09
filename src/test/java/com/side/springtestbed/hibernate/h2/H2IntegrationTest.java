@@ -1,6 +1,7 @@
 package com.side.springtestbed.hibernate.h2;
 
 import com.side.springtestbed.common.utils.SQLStatementCountValidator;
+import com.side.springtestbed.hibernate.postgresql.entity.Post;
 import com.side.springtestbed.hibernate.postgresql.repository.PostCommentRepository;
 import com.side.springtestbed.hibernate.postgresql.repository.PostRepository;
 import com.side.springtestbed.hibernate.postgresql.repository.TagRepository;
@@ -13,6 +14,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 // 이 임포트는 유지
+
+import javax.sql.DataSource;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -39,6 +46,9 @@ public class H2IntegrationTest {
     @Autowired
     private TagRepository tagRepository;
 
+    @Autowired
+    private DataSource dataSource;
+
     @Test
     @DisplayName("H2 인메모리 데이터베이스 연결 테스트")
     void testH2InMemoryConnection() {
@@ -47,7 +57,7 @@ public class H2IntegrationTest {
 
         // 간단한 연결 테스트
         long count = postRepository.count();
-        SQLStatementCountValidator.assertSelectCount(0);
+        assertThat(count).isEqualTo(0);
 
         log.info("탐색된 카운트 : {}", count);
     }

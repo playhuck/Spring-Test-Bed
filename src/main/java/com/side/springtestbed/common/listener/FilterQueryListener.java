@@ -1,6 +1,8 @@
 package com.side.springtestbed.common.listener;
 
 import net.ttddyy.dsproxy.ExecutionInfo;
+import net.ttddyy.dsproxy.QueryCount;
+import net.ttddyy.dsproxy.QueryCountHolder;
 import net.ttddyy.dsproxy.QueryInfo;
 import net.ttddyy.dsproxy.listener.QueryExecutionListener;
 import org.slf4j.Logger;
@@ -18,10 +20,9 @@ public class FilterQueryListener implements QueryExecutionListener {
     @Override
     public void afterQuery(ExecutionInfo executionInfo, List<QueryInfo> list) {
 
-        List<Boolean> isDDLQuery = list.stream().map(q -> isDDLQuery(q.getQuery())).toList();
+        boolean isDDLQuery = list.stream().noneMatch(queryInfo -> isDDLQuery(queryInfo.getQuery()));;
 
-        logger.error("isDDL getQuery : {}", list.get(0).getQuery());
-        if(isDDLQuery.isEmpty()) print(executionInfo, list);
+        if(isDDLQuery) print(executionInfo, list);
 
     }
 
@@ -29,20 +30,31 @@ public class FilterQueryListener implements QueryExecutionListener {
 
         String trimQuery = query.trim().toLowerCase();
 
-        return
-                trimQuery.startsWith("create table") ||
-                        trimQuery.startsWith("drop table") ||
-                        trimQuery.startsWith("create index") ||
-                        trimQuery.startsWith("drop index");
+        return trimQuery.startsWith("create table") ||
+                trimQuery.startsWith("drop table") ||
+                trimQuery.startsWith("create index") ||
+                trimQuery.startsWith("drop index") ||
+                trimQuery.startsWith("alter table");
     }
 
     private void print(ExecutionInfo execInfo, List<QueryInfo> queryInfoList) {
         StringBuilder sb = new StringBuilder();
+
+        QueryCount queryCount = QueryCountHolder.getGrandTotal();
+        String lowerCaseQuery = queryInfoList.getFirst().getQuery().toLowerCase();
+
         sb.append("Name:").append(execInfo.getDataSourceName())
-                .append(", Connection:").append(execInfo.getConnectionId())
-                .append(", Time:").append(execInfo.getElapsedTime()).append("ms")
-                .append(", Success:").append(execInfo.isSuccess())
-                .append("\n");
+                .append("\nConnection:").append(execInfo.getConnectionId())
+                .append("\nTime:").append(execInfo.getElapsedTime()).append("ms")
+                .append("\nSuccess:").append(execInfo.isSuccess())
+                .append("\nisBatch:").append(execInfo.isBatch());
+
+        if(execInfo.isBatch())
+            sb.append("\nBatchSize:").append(execInfo.getBatchSize());
+        if(lowerCaseQuery.startsWith("select"))
+            sb.append("\nSelect Count:").append(queryCount.getSelect());
+
+        sb.append("\n");
 
         for (QueryInfo queryInfo : queryInfoList) {
             sb.append("Query:[\"").append(queryInfo.getQuery()).append("\"]\n");
