@@ -15,7 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 // 이 임포트는 유지
 
@@ -23,7 +22,6 @@ import javax.sql.DataSource;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,12 +57,6 @@ public class H2IntegrationTest {
 
     @Autowired
     private PostCommentRepository commentRepository;
-
-    @Autowired
-    private TagRepository tagRepository;
-
-    @Autowired
-    private DataSource dataSource;
 
     public H2IntegrationTest() {}
 
@@ -133,7 +125,7 @@ public class H2IntegrationTest {
         List<Post> postList = new ArrayList<>(500);
 
         // 대량 데이터 생성 (500개 포스트, 각각 3개 댓글)
-        for (int i = 1; i <= 5000; i++) {
+        for (int i = 1; i <= 50000; i++) {
             Post post = Post.builder()
                     .title("H2 성능 테스트 포스트 " + i)
                     .content("H2 인메모리 데이터베이스 성능 테스트용 내용 " + i)
@@ -158,8 +150,8 @@ public class H2IntegrationTest {
         long totalPosts = postRepository.count();
         long totalComments = commentRepository.count();
 
-        assertThat(totalPosts).isEqualTo(5000);
-        assertThat(totalComments).isEqualTo(5000);
+        assertThat(totalPosts).isEqualTo(50000);
+        assertThat(totalComments).isEqualTo(50000);
 
         log.info("H2-INMEMORY 포스트 수: {}", totalPosts);
         log.info("H2-INMEMORY 댓글 수: {}", totalComments);
@@ -171,7 +163,7 @@ public class H2IntegrationTest {
         long searchEndTime = System.currentTimeMillis();
         long searchDuration = searchEndTime - searchStartTime;
 
-        assertThat(searchResults).hasSize(5000);
+        assertThat(searchResults).hasSize(50000);
         log.info("H2-INMEMORY 대량 검색 테스트 완료: {} 건 조회 (검색 시간: {}ms)", searchResults.size(), searchDuration);
 
         log.info("H2-INMEMORY 성능 테스트 완료");
