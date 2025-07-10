@@ -19,7 +19,8 @@ import java.util.List;
 public class Post {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "post_seq")
+    @SequenceGenerator(name = "post_seq", sequenceName = "post_id_seq", allocationSize = 500)
     private Long id;
     
     @Column(length = 255)

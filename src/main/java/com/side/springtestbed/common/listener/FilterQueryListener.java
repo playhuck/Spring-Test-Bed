@@ -5,9 +5,11 @@ import net.ttddyy.dsproxy.QueryCount;
 import net.ttddyy.dsproxy.QueryCountHolder;
 import net.ttddyy.dsproxy.QueryInfo;
 import net.ttddyy.dsproxy.listener.QueryExecutionListener;
+import net.ttddyy.dsproxy.proxy.ParameterSetOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class FilterQueryListener implements QueryExecutionListener {
@@ -22,7 +24,8 @@ public class FilterQueryListener implements QueryExecutionListener {
 
         boolean isDDLQuery = list.stream().noneMatch(queryInfo -> isDDLQuery(queryInfo.getQuery()));;
 
-        if(isDDLQuery) print(executionInfo, list);
+        if(isDDLQuery)
+            print(executionInfo, list);
 
     }
 
@@ -43,6 +46,8 @@ public class FilterQueryListener implements QueryExecutionListener {
         QueryCount queryCount = QueryCountHolder.getGrandTotal();
         String lowerCaseQuery = queryInfoList.getFirst().getQuery().toLowerCase();
 
+        sb.append("ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ\n");
+
         sb.append("Name:").append(execInfo.getDataSourceName())
                 .append("\nConnection:").append(execInfo.getConnectionId())
                 .append("\nTime:").append(execInfo.getElapsedTime()).append("ms")
@@ -59,9 +64,20 @@ public class FilterQueryListener implements QueryExecutionListener {
         for (QueryInfo queryInfo : queryInfoList) {
             sb.append("Query:[\"").append(queryInfo.getQuery()).append("\"]\n");
             if (!queryInfo.getParametersList().isEmpty()) {
-                sb.append("Params:").append(queryInfo.getParametersList()).append("\n");
+                queryInfo.getParametersList().forEach(parameter -> {
+
+                    /* Parameter 로깅 활성화
+                        if(!parameter.isEmpty()) {
+                            parameter.forEach(args -> {
+                                sb.append("Params:").append(Arrays.toString(args.getArgs())).append("\n");
+                            });
+                        }
+                     */
+                });
             }
         }
+
+        sb.append("ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ");
 
         // 슬로우 쿼리 체크 (300ms 이상)
         if (execInfo.getElapsedTime() > 300) {

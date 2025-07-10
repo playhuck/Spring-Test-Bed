@@ -17,6 +17,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -106,6 +107,8 @@ class H2InMemoryIntegrationTest {
 
         long startTime = System.currentTimeMillis();
 
+        List<Post> postList = new ArrayList<>(500);
+
         // 대량 데이터 생성 (500개 포스트, 각각 3개 댓글)
         for (int i = 1; i <= 500; i++) {
             Post post = Post.builder()
@@ -122,8 +125,10 @@ class H2InMemoryIntegrationTest {
                 post.addComment(comment);
             }
 
-            postRepository.save(post);
+            postList.add(post);
         }
+
+        postRepository.saveAll(postList);
 
         long endTime = System.currentTimeMillis();
         long duration = endTime - startTime;
