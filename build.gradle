@@ -25,6 +25,7 @@ dependencies {
     // 데이터베이스 관련 (커스텀 트랜잭션 매니저에서 사용)
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'net.ttddyy:datasource-proxy:1.10'
+    implementation 'com.github.p6spy:p6spy:3.9.1'
 
     // PostgreSQL 드라이버 추가
     implementation 'org.postgresql:postgresql'
@@ -52,6 +53,11 @@ dependencies {
     testImplementation platform('org.testcontainers:testcontainers-bom:1.19.3')
     testImplementation 'org.testcontainers:junit-jupiter'
     testImplementation 'org.testcontainers:postgresql'
+
+    implementation 'org.ehcache:ehcache:3.10.0'
+    implementation 'javax.cache:cache-api:1.1.1'
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+    implementation("net.steppschuh.markdowngenerator:markdowngenerator:1.3.1.1")
 }
 
 tasks.named('test') {
