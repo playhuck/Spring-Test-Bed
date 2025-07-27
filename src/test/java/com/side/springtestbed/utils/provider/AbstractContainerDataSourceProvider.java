@@ -1,6 +1,6 @@
 package com.side.springtestbed.utils.provider;
 
-import com.side.springtestbed.utils.Database;
+import com.side.springtestbed.utils.utils.Database;
 import com.side.springtestbed.utils.data.DataSourceProvider;
 import org.testcontainers.containers.JdbcDatabaseContainer;
 

@@ -1,7 +1,7 @@
 package com.side.springtestbed.utils.provider;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
-import com.side.springtestbed.utils.Database;
+import com.side.springtestbed.utils.utils.Database;
 import com.side.springtestbed.utils.Queries;
 import com.side.springtestbed.utils.utils.MySQLQueries;
 import org.hibernate.dialect.MySQLDialect;

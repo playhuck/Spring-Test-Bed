@@ -5,6 +5,7 @@ import com.side.springtestbed.utils.conn.ConnectionCallable;
 import com.side.springtestbed.utils.conn.ConnectionVoidCallable;
 import com.side.springtestbed.utils.data.DataSourceProvider;
 import com.side.springtestbed.utils.data.DataSourceProxyType;
+import com.side.springtestbed.utils.utils.Database;
 import com.side.springtestbed.utils.utils.LockType;
 import com.side.springtestbed.utils.utils.ReflectionUtils;
 import com.side.springtestbed.utils.utils.VoidCallable;

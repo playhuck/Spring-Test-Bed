@@ -1,12 +1,11 @@
-package com.side.springtestbed.utils;
+package com.side.springtestbed.utils.utils;
 
+import com.side.springtestbed.utils.containers.CockroachContainer;
+import com.side.springtestbed.utils.containers.MSSQLServerContainer;
+import com.side.springtestbed.utils.containers.MariaDBContainer;
+import com.side.springtestbed.utils.containers.MySQLContainer;
 import com.side.springtestbed.utils.data.DataSourceProvider;
-import com.side.springtestbed.utils.provider.HSQLDBDataSourceProvider;
-import com.side.springtestbed.utils.provider.MySQLDataSourceProvider;
-import com.side.springtestbed.utils.provider.OracleDataSourceProvider;
-import com.side.springtestbed.utils.provider.PostgreSQLDataSourceProvider;
-import com.side.springtestbed.utils.utils.OracleContainer;
-import com.side.springtestbed.utils.utils.ReflectionUtils;
+import com.side.springtestbed.utils.provider.*;
 import org.hibernate.dialect.Dialect;
 import org.testcontainers.containers.JdbcDatabaseContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
@@ -32,22 +31,22 @@ public enum Database {
             return new PostgreSQLContainer("postgres:15.3");
         }
     },
-    ORACLE {
-        @Override
-        public Class<? extends DataSourceProvider> dataSourceProviderClass() {
-            return OracleDataSourceProvider.class;
-        }
-
-        @Override
-        protected JdbcDatabaseContainer newJdbcDatabaseContainer() {
-            return new OracleContainer("gvenzl/oracle-xe:21.3.0-slim");
-        }
-
-        @Override
-        protected boolean supportsDatabaseName() {
-            return false;
-        }
-    },
+//    ORACLE {
+//        @Override
+//        public Class<? extends DataSourceProvider> dataSourceProviderClass() {
+//            return OracleDataSourceProvider.class;
+//        }
+//
+//        @Override
+//        protected JdbcDatabaseContainer newJdbcDatabaseContainer() {
+//            return new OracleContainer("gvenzl/oracle-xe:21.3.0-slim");
+//        }
+//
+//        @Override
+//        protected boolean supportsDatabaseName() {
+//            return false;
+//        }
+//    },
     MYSQL {
         @Override
         public Class<? extends DataSourceProvider> dataSourceProviderClass() {

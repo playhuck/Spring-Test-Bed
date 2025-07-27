@@ -1,0 +1,1 @@
+테스트는 Autocommit의 testConnectionLeaseTime를 참고해서 하나만 더 만들어줄래?

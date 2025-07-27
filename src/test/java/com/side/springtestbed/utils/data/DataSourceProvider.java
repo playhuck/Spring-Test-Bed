@@ -1,6 +1,6 @@
 package com.side.springtestbed.utils.data;
 
-import com.side.springtestbed.utils.Database;
+import com.side.springtestbed.utils.utils.Database;
 import com.side.springtestbed.utils.Queries;
 import com.side.springtestbed.utils.utils.ReflectionUtils;
 import org.hibernate.dialect.Dialect;

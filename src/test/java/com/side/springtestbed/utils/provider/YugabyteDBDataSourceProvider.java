@@ -3,25 +3,19 @@ package com.side.springtestbed.utils.provider;
 import com.side.springtestbed.utils.utils.Database;
 import com.side.springtestbed.utils.Queries;
 import com.side.springtestbed.utils.utils.PostgreSQLQueries;
+import com.zaxxer.hikari.util.DriverDataSource;
 import org.hibernate.dialect.PostgreSQLDialect;
 import org.postgresql.Driver;
 import org.postgresql.ds.PGSimpleDataSource;
+import org.testcontainers.containers.JdbcDatabaseContainer;
 
 import javax.sql.DataSource;
 import java.util.Properties;
 
-public class PostgreSQLDataSourceProvider extends AbstractContainerDataSourceProvider {
-
-    private Boolean reWriteBatchedInserts;
-
-    public boolean getReWriteBatchedInserts() {
-        return reWriteBatchedInserts;
-    }
-
-    public PostgreSQLDataSourceProvider setReWriteBatchedInserts(boolean reWriteBatchedInserts) {
-        this.reWriteBatchedInserts = reWriteBatchedInserts;
-        return this;
-    }
+/**
+ * @author Vlad Mihalcea
+ */
+public class YugabyteDBDataSourceProvider extends AbstractContainerDataSourceProvider {
 
     @Override
     public String hibernateDialect() {
@@ -30,18 +24,24 @@ public class PostgreSQLDataSourceProvider extends AbstractContainerDataSourcePro
 
     @Override
     protected String defaultJdbcUrl() {
-        return "jdbc:postgresql://localhost/high_performance_java_persistence";
+        return "jdbc:postgresql://127.0.0.1:5433/high_performance_java_persistence";
     }
 
     protected DataSource newDataSource() {
+        JdbcDatabaseContainer container = database().getContainer();
+        if(container != null) {
+            return new DriverDataSource(
+                    container.getJdbcUrl(),
+                    container.getDriverClassName(),
+                    new Properties(),
+                    container.getUsername(),
+                    container.getPassword()
+            );
+        }
         PGSimpleDataSource dataSource = new PGSimpleDataSource();
         dataSource.setURL(url());
         dataSource.setUser(username());
         dataSource.setPassword(password());
-        if (reWriteBatchedInserts != null) {
-            dataSource.setReWriteBatchedInserts(reWriteBatchedInserts);
-        }
-
         return dataSource;
     }
 
@@ -58,19 +58,14 @@ public class PostgreSQLDataSourceProvider extends AbstractContainerDataSourcePro
     @Override
     public Properties dataSourceProperties() {
         Properties properties = new Properties();
-        properties.setProperty("databaseName", "high_performance_java_persistence");
-        properties.setProperty("serverName", "localhost");
         properties.setProperty("user", username());
         properties.setProperty("password", password());
-        if (reWriteBatchedInserts != null) {
-            properties.setProperty("reWriteBatchedInserts", String.valueOf(reWriteBatchedInserts));
-        }
         return properties;
     }
 
     @Override
     public String username() {
-        return "postgres";
+        return "yugabyte";
     }
 
     @Override
@@ -80,7 +75,7 @@ public class PostgreSQLDataSourceProvider extends AbstractContainerDataSourcePro
 
     @Override
     public Database database() {
-        return Database.POSTGRESQL;
+        return Database.YUGABYTEDB;
     }
 
     @Override
