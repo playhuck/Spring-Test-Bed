@@ -1,4 +1,4 @@
-package com.side.springtestbed.utils;
+package com.side.springtestbed.utils.utils;
 
 public enum LockType {
     LOCKS,

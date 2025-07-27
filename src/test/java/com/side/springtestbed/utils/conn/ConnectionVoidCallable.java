@@ -1,4 +1,4 @@
-package com.side.springtestbed.utils;
+package com.side.springtestbed.utils.conn;
 
 import java.sql.Connection;
 import java.sql.SQLException;

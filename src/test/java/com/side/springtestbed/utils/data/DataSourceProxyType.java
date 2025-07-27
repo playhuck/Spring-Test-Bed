@@ -1,5 +1,6 @@
-package com.side.springtestbed.utils;
+package com.side.springtestbed.utils.data;
 
+import com.side.springtestbed.utils.InlineQueryLogEntryCreator;
 import net.ttddyy.dsproxy.listener.ChainListener;
 import net.ttddyy.dsproxy.listener.DataSourceQueryCountListener;
 import net.ttddyy.dsproxy.listener.logging.SLF4JQueryLoggingListener;
